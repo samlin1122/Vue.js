@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test</title>
+  <script src="vue.js"></script>
+</head>
+<style>
+  .demo {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: gray;
+    margin: 10px;
+  }
+
+  .red {
+    background-color: red;
+  }
+
+  .blue {
+    background-color: blue;
+  }
+
+  .green {
+    background-color: green;
+  }
+</style>
+
+<body>
+  <div id="app">
+    <h1 v-once>{{title}}</h1>
+    <p>{{sayHello()}}</p> - <a v-bind:href="link">Google</a>
+    <p v-html="finish"></p>
+    <button v-on:click="increace(2,$event)">{{counter}}</button>
+    <button v-on:click="counter++">{{counter}}</button>
+    <p v-on:mousemove="update">coords {{x}}/{{y}} - <span @mousemove.stop="">Dead Spot</span></p>
+    <input type="text" @keyup.enter.space="alert">
+  </div>
+  <div id="app2">
+    <input type="text" v-model="color">
+    <input type="text" v-model="width">
+    <br>
+    <div class="demo" @click="attach=!attach" :class="{red:attach}" ></div>
+    <div class="demo" :class="checkthis"></div>
+    <div class="demo" :class="[color]"></div>
+    <br>
+    <div class="demo" ></div>
+    <div class="demo" :style="{width:width+'px',height:width+'px'}"></div>
+    <div class="demo" :style="{backgroundColor:color}"></div>
+  </div>
+  <script>
+    new Vue({
+      el: "#app2",
+      data: {
+        attach: false,
+        color: "green",
+        width:100
+      },
+      computed: {
+        checkthis() {
+          return {
+            red: this.attach,
+            blue: !this.attach
+          }
+        }
+      }
+    })
+    new Vue({
+      el: "#app",
+      data: {
+        title: "Hello World",
+        counter: 0,
+        x: 0,
+        y: 0,
+        link: "http://google.com",
+        finish: "<a href='http://google.com'>Google</a>"
+      },
+      methods: {
+        sayHello: function () {
+          this.title = "Hello"
+          return this.title
+        },
+        increace(step, event) {
+          this.counter += step
+        },
+        update(event) {
+          this.x = event.clientX;
+          this.y = event.clientY
+        },
+        alert() {
+          alert(this.title)
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
