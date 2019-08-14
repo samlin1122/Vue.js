@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p v-if="show">you can see me!</p>
+    <p v-else>now you see</p>
+    <p v-show="show">123123123</p>
+    <button @click="show=!show">Click Me</button>
+  </div>
+<div id="app2">
+  <ul>
+    <li v-for="ingredient in ingredients">{{ingredient}}</li><br>
+    <li v-for="(ingredient,i) in ingredients" :key="ingredient">{{ingredient}} ({{i}})</li><br>
+    <li v-for="person in persons">{{person.name}}</li><br>
+    <li v-for="person in persons">
+      <span v-for="value in person ">{{value}}</span>
+      <div v-for="(value,key,index) in person ">{{key}}:{{value}}({{index}})</div>
+    </li><br>
+  </ul>
+  <ul>
+    <span v-for="n in 10">{{n}}</span>
+  </ul>
+</div>
+
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el: "#app2",
+      data: {
+        ingredients:["red","blue","green"],
+        persons:[
+          {name:"Sam",age:27,color:"red"},
+          {name:"Anna",age:"unknown",color:"blue"}
+        ]
+      }
+    })
+    new Vue({
+      el: "#app",
+      data: {
+        show: true
+      }
+    })
+  </script>
+</body>
+
+</html>

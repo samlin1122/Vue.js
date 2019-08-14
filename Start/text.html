@@ -44,21 +44,36 @@
     <input type="text" v-model="color">
     <input type="text" v-model="width">
     <br>
-    <div class="demo" @click="attach=!attach" :class="{red:attach}" ></div>
+    <div class="demo" @click="attach=!attach" :class="{red:attach}"></div>
     <div class="demo" :class="checkthis"></div>
     <div class="demo" :class="[color]"></div>
     <br>
-    <div class="demo" ></div>
+    <div class="demo"></div>
     <div class="demo" :style="{width:width+'px',height:width+'px'}"></div>
     <div class="demo" :style="{backgroundColor:color}"></div>
   </div>
+  <div id="app-5">
+    <p>{{ message }}</p>
+    <button v-on:click="reverseMessage">反转消息</button>
+  </div>
   <script>
+    var app5 = new Vue({
+      el: '#app-5',
+      data: {
+        message: 'Hello Vue.js!'
+      },
+      methods: {
+        reverseMessage: function () {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    })
     new Vue({
       el: "#app2",
       data: {
         attach: false,
         color: "green",
-        width:100
+        width: 100
       },
       computed: {
         checkthis() {
