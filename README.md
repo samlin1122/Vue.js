@@ -10,8 +10,10 @@ v-html
 
 >### computed 
 有資料緩存的功能，若內部資料無更動則不會更新，無法帶參數進去，主要用來做計算
+
 >### <template>
  會顯示此內容但不會輸出此標籤
+ 
 >### option value="disabled"
 讓選單選像無法選取
 
@@ -19,6 +21,7 @@ v-html
 
 >### V-for對於物件與陣列給回傳的值不一樣
 陣列(a,b) in array// a=items, b=index 
+
 物件(a,b) in obj  // a=items b=prop
 
 >### Vue.set(target,key,value) 將資料寫入Vue的方法
@@ -35,25 +38,25 @@ true-value false-value
 
 
 >### 修飾符號
-##### .preventDefault()
+#### .preventDefault()
 事件修飾符號
-##### .prevent
+#### .prevent
 按鍵修飾符號
 
-##### 事件修飾符號
-.stop
+### 事件修飾符號
+#### .stop
 
 停止冒泡stopPropagation
 
-.capture 
+#### .capture 
 
 由外而內觸發
 
-.self 
+#### .self 
 
 此物件觸發時只觸發此物件
 
-.once 
+#### .once 
 
 只觸發一次
 
