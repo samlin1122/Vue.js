@@ -25,11 +25,11 @@
 
 >### v-model
 
-##### v-model.lazy 
+#### v-model.lazy 
 類似on changed
-##### v-model.number 
+#### v-model.number 
 將輸出值轉為數字
-##### v-model.trim 
+#### v-model.trim 
 消除多於空白建 
 
 
@@ -108,3 +108,24 @@ indexOf 會回傳第一個被找到的索引
        console.log(person,...num) // "小美" ㄝ [1,2,3,4]
        }
        hello("小美",1,2,3,4)
+>### 解構賦值
+
+    let arr=[1,2,3,4]
+    let[a,b,c,d]=arr 
+    console.log(a,b,c,d)// a=1 b=2 c=3 d=4
+    
+    let a=boy
+    let b=girl
+    [a,b]=[b,a]
+    console.log(a,b)// a=girl b=boy
+    
+    let str="哈囉你好"
+    [a,b,c,d]=str
+    console.log(a,b,c,d)// a="哈" b="囉" c="你" d="好" 
+    
+    let color={apple:red, sky:blue ,egg:white}
+    let {apple:blood}=color
+    console.log(blood)
+    
+
+    
