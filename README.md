@@ -1,5 +1,6 @@
 # Vue.js
 
+>### 入門
 v-bind 縮寫為：
 
 v-on 縮寫為＠
@@ -79,3 +80,32 @@ true-value false-value
 若直接在定義component時在<slot>中插入文字則為預設值，之後加入的<slot>則會取代此預設值
  
 <any slot="這裡"> 搭配 <slot name="這裡">
+ 
+ >### 篩選－移除陣列中重複的選項
+      vm.location = vm.location.filter(function(element, index, arr){
+           return arr.indexOf(element) === index;
+indexOf 會回傳第一個被找到的索引
+利用此特性匹配index進行篩選
+
+>### localStorage
+
+       //在localStorage寫入資料
+       localStorage.setItem('Data', JSON.stringify(vm.stared));
+       //從localStorage取出資料
+       stared:JSON.parse(localStorage.getItem('Data'))
+
+>### ES6
+
+如果function() 誇號中無定義輸入的內容，會自動放入在arguments
+       
+    function hello(){
+       let arg=[...arguments]
+       console.log(arg) // [1,2,3,4]
+       }
+       hello(1,2,3,4)
+或者利用其餘參數
+
+    function hello(person,...num){
+       console.log(person,...num) // "小美" ㄝ [1,2,3,4]
+       }
+       hello("小美",1,2,3,4)
