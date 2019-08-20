@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>基礎元件練習</title>
+    <title>Props 注意事項</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="images/favicon.ico" rel="shortcut icon">
     <meta charset="UTF-8">
@@ -48,7 +48,7 @@
   <h6 class="text-capitalize text-muted">components</h6>
   
     
-      <a href="/components/basic.html"  class="btn btn-block btn-primary active">
+      <a href="/components/basic.html"  class="btn btn-block btn-link">
         基礎元件
       </a>
     
@@ -66,7 +66,7 @@
     
   
     
-      <a href="/components/prop_adv.html"  class="btn btn-block btn-link">
+      <a href="/components/prop_adv.html"  class="btn btn-block btn-primary active">
         Props 注意事項
       </a>
     
@@ -112,105 +112,149 @@
         
         <div class="col-md-9 post">      
           <!-- 練習開始 -->
-          <h1 class="mt-0 text-muted">基礎元件練習</h1>
+          <h1 class="mt-0 text-muted">Props 注意事項</h1>
           
 <div class="alert alert-secondary">
   <ol class="mb-0">
-    <li>使用 x-template 建立表格元件</li>
-    <li>使用 is 掛載 template</li>
-    <li>使用 prop 傳遞資料</li>
-    <li>說明局部註冊及全域註冊</li>
+    <li>請跟隨課程完成此章節。</li>
   </ol>
 </div>
 
 <div id="app">
-  <table class="table">
-    <thead>
-    </thead>
-    <tbody>
-      <tr v-for="(item, key) in data" :item="item" :key="key">
-        <td>{{ item.name }}</td>
-        <td>{{ item.cash }}</td>
-        <td>{{ item.icash }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2>單向數據流</h2>
+  <photo :img-url="url"></photo>
+  <p>修正單向數據流所造成的錯誤</p>
+
+  <h2 class="mt-3">物件傳參考特性 及 尚未宣告的變數</h2>
+  <div class="row">
+    <div class="col-sm-4">
+      <card :user-data="user"></card>
+    </div>
+  </div>
+
+  <h2 class="mt-3">維持狀態與生命週期</h2>
+  <div class="form-check">
+    <input type="checkbox" class="form-check-input" id="isShow" v-model="isShow">
+    <label class="form-check-label" for="isShow">Check me out</label>
+  </div>
+  <div class="row">
+    <div class="col-sm-4" >
+      <keep-alive>
+        <keep-card v-if="isShow">
+        </keep-card>
+      </keep-alive>
+    </div>
+  </div>
 </div>
 
+<script type="text/x-template" id="photo">
+<div>
+  <img :src="imgUrl" class="img-fluid" alt="" />
+  <input type="text" class="form-control" v-model="newUrl">
+</div>
+</script>
+
+
+<script type="text/x-template" id="card">
+<div class="card" v-if="user.picture">
+  <img class="card-img-top" :src="user.picture.large" alt="Card image cap">
+  <div class="card-body">
+    <h5 class="card-title">{{ user.name.first }} {{ user.name.last }}</h5>
+    <p class="card-text">{{ user.email }}</p>
+  </div>
+  <div class="card-footer">
+    <input type="email" class="form-control" v-model="user.email">
+  </div>
+</div>
+</script>
+
 <script>
+Vue.component('photo', {
+  props: ['imgUrl'],
+  template: '#photo',
+  // 解答：
+  data: function () {
+    return {
+      newUrl: this.imgUrl
+    }
+  }
+})
+
+Vue.component('card', {
+  props: ['userData'],
+  template: '#card',
+  data: function () {
+    return {
+      user: this.userData
+    }
+  }
+});
+
+Vue.component('keepCard', {
+  template: '#card',
+  data: function() {
+    return {
+      user: {}
+    }
+  },
+  created: function() {
+    var vm = this;
+    $.ajax({
+      url: 'https://randomuser.me/api/',
+      dataType: 'json',
+      success: function(data) {
+        vm.user = data.results[0];
+      }
+    });
+  }
+});
+
 var app = new Vue({
   el: '#app',
   data: {
-    data: [
-      {
-        name: '小明',
-        cash: 100,
-        icash: 500,
-      },
-      {
-        name: '杰倫',
-        cash: 10000,
-        icash: 5000,
-      },
-      {
-        name: '漂亮阿姨',
-        cash: 500,
-        icash: 500,
-      },
-      {
-        name: '老媽',
-        cash: 10000,
-        icash: 100,
-      },
-    ]
+    user: {},
+    url: 'https://images.unsplash.com/photo-1522204538344-922f76ecc041?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=50e38600a12d623a878983fc5524423f&auto=format&fit=crop&w=1351&q=80',
+    isShow: true 
+  },
+  created: function() {
+    var vm = this;
+    $.ajax({
+      url: 'https://randomuser.me/api/',
+      dataType: 'json',
+      success: function(data) {
+        vm.user = data.results[0];
+      }
+    });
   }
 });
 </script>
 
-<!-- 
-<script type="text/x-template" id="row-component">
-  <tr>
-    <td>{{ item.name }}</td>
-    <td>{{ item.cash }}</td>
-    <td>{{ item.icash }}</td>
-  </tr>
-</script>
 
-var child = {
-  props: ['item'],
-  template: '#row-component'
-}
+<!--
+<h2>單向數據流</h2>
+<photo :img-url="url"></photo>
+<p>修正單向數據流所造成的錯誤</p>
 
-var app = new Vue({
-  el: '#app',
-  data: {
-    data: [
-      {
-        name: '小明',
-        cash: 100,
-        icash: 500,
-      },
-      {
-        name: '杰倫',
-        cash: 10000,
-        icash: 5000,
-      },
-      {
-        name: '漂亮阿姨',
-        cash: 500,
-        icash: 500,
-      },
-      {
-        name: '老媽',
-        cash: 10000,
-        icash: 100,
-      },
-    ]
-  },
-  components: {
-    "row-component": child
-  } 
-});
+<h2 class="mt-3">物件傳參考特性 及 尚未宣告的變數</h2>
+<div class="row">
+  <div class="col-sm-4">
+    <card :user-data="user" v-if="user.picture"></card>
+  </div>
+</div>
+
+<h2 class="mt-3">維持狀態與生命週期</h2>
+<div class="form-check">
+  <input type="checkbox" class="form-check-input" id="isShow" v-model="isShow">
+  <label class="form-check-label" for="isShow">Check me out</label>
+</div>
+<div class="row">
+  <div class="col-sm-4">
+    <keep-alive>
+      <keep-card v-if="isShow">
+      </keep-card>
+    </keep-alive>
+  </div>
+</div>
 --> 
         </div>
       </div>

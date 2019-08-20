@@ -129,7 +129,9 @@
 
 <div id="app">
   <select name="" id="" class="form-control mb-3">
-    <option value="">--- 請選擇城市 ---</option>
+      <option value="">--- 請選擇城市 ---</option>
+      <option value="all">所有城市</option>
+      <option v-for="county in location">{{county}}</option>
   </select>
   <div>
     <h4>關注城市</h4>
@@ -151,47 +153,118 @@
   </div>
   
   <hr>
+
+  <citys :data="data"></citys>
+</div>
+<button @click="getData()">GET</button>
+
+<script type="text/x-template" id="citys">
   <div class="card-columns">
     <div class="card status-aqi2">
-      <div class="card-header">苗栗縣 - 三義
+      <div class="card-header">{{County}} - {{SiteName}}
         <a href="#" class="float-right"><i class="far fa-star"></i></a>
       </div>
       <div class="card-body">
         <ul class="list-unstyled">
-          <li>AQI 指數: 54</li>
-          <li>PM2.5: 8</li>
-          <li>說明: 普通</li>
+          <li>AQI 指數: {{AQI}}</li>
+          <li>PM2.5: {{PM}}</li>
+          <li>說明: {{state}}</li>
         </ul>
-      2018-05-20 16:00
+      {{PublishTime}}
       </div>
     </div>
   </div>
-</div>
+  </script>
 
 <script>
 // API 來源
 // https://opendata.epa.gov.tw/Data/Contents/AQI/
-
 var app = new Vue({
   el: '#app',
   data: {
     data: [],
     location: [],
-    stared: [],
-    filter: '',
+    stared: JSON.parse(localStorage.getItem('cardsData')) || [],
+    filter: 'all',
   },
-  // 請在此撰寫 JavaScript
+  created: function() {
+	this.getData()
+  },
+  computed:{
+    filterCounty:function(){
+        if(this.filter == 'all'){
+          return this.data;
+        }else{
+          return this.data.filter(item=>{
+            return item.County === this.filter
+          })
+        }
+    },
+    cardColor: function(){
+      let classColor;
+      switch(this.filterCounty.Status){
+        case '普通':
+          classColor = 'status-aqi2'
+          break;
+        case '對敏感族群不健康':
+          classColor = 'status-aqi3'
+          break;
+        case '對所有族群不健康':
+          classColor = 'status-aqi4'
+          break;
+        case '非常不健康':
+          classColor = 'status-aqi5'
+          break;
+        case '危害':
+          classColor = 'status-aqi6'
+          break;
+        default:
+          classColor = ''
+          break;
+      }
+      return classColor
+    },
+  },
+
   methods: {
     getData() {
       const vm = this;
       const api = 'http://opendata2.epa.gov.tw/AQI.json';
-
+      
       // 使用 jQuery ajax
       $.get(api).then(function( response ) {
         vm.data = response;
-        console.log(response)
+        // console.log(response)
+        
+        vm.data.forEach(item => {
+          if(vm.data.indexOf(item.County) === -1){/////////////////////////////////
+            vm.location.push(item.County)
+          }
+        })
+        
+        vm.location = vm.location.filter(function(element, index, arr){
+          return arr.indexOf(element) === index;
+        });
       });
     },
+    add(focusItem){
+      var vm = this
+      vm.stared.push(focusItem);
+      var index = this.filterCounty.findIndex(item=>{
+        return focusItem.SiteName == item.SiteName
+      })
+      this.filterCounty.splice(index,1)
+      localStorage.setItem('cardsData', JSON.stringify(vm.stared));
+    },
+    remove(focusItem){
+      var vm = this
+      vm.filterCounty.push(focusItem);
+      var index = this.stared.findIndex(item=>{
+        return focusItem.SiteName == item.SiteName
+      })
+      this.stared.splice(index,1)
+      localStorage.setItem('cardsData', JSON.stringify(vm.stared));
+    }
   }
 });
 </script>
