@@ -9,6 +9,15 @@
 >### computed
 有資料緩存的功能，若內部資料無更動則不會更新，無法帶參數進去，主要用來做計算
 
+>### filter
+n為|前面的參數
+
+    <div>{{ item.cash | dollarSign}}</div>
+    
+    Vue.filter("dollorSign",function(n){
+     return `$ ${n}`
+    })
+
 >### template
 會顯示此內容但不會輸出此標籤
 
