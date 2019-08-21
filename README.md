@@ -18,6 +18,20 @@ n為|前面的參數
      return `$ ${n}`
     })
 
+>### mixin
+
+可混和多個元件的行為
+    
+    var mixinFilter={ template:'#row-compnent',filters:{...}}
+    var mixinMounted={mounted(){...}}
+    Vue.component('row.component',{
+    props:['item'],
+    data(){return{data:{}}},
+    mixins:[]
+    })
+    
+    
+
 >### template
 會顯示此內容但不會輸出此標籤
 
@@ -76,6 +90,9 @@ n為|前面的參數
 `@click.right` 右鍵觸發
 
 還有 .midlde .left
+
+
+
        
 ## Others
 #### option disabled
@@ -102,7 +119,7 @@ indexOf 會回傳第一個被找到的索引
        //從localStorage取出資料
        stared:JSON.parse(localStorage.getItem('Data'))
 
-### ES6
+## ES6
 
 如果function() 誇號中無定義輸入的內容，會自動放入在arguments
        
