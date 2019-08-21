@@ -126,6 +126,25 @@ indexOf 會回傳第一個被找到的索引
     let color={apple:red, sky:blue ,egg:white}
     let {apple:blood}=color
     console.log(blood)
-    
 
+>### 輸出li技巧
+    
+    <div id="app"></div>
+    let newUl=`
+    <ul>
+      ${people.map(person=>`<li>我叫${person.name}</li>`).join("")}
+    </ul>`
+    $("#app").html(newUl)
+    
+>### .every .some
+
+#### .every
+需所有結果符合才回傳true
+
+#### .some
+部分結果符合即回傳true
+    
+>### reduce
+
+    let num=people.reduce(function(prev,item,index){},0)// 0 為起始值,prev的第一個值
     
