@@ -134,7 +134,7 @@
     <option v-for="county in location">{{county}}</option>
   </select>
   <!-- 關注城市   -->
-  <div class="focusbox">
+  <div>
       <h3>關注城市</h3>
       <div class="card-columns">
         <cards v-for="(item,key) in stared" 
@@ -146,7 +146,7 @@
       </div>
     </div>
 
-    <div class="allCounty">
+    <div>
       <h3>其餘城市</h3>
       <div class="card-columns">   
       <cards v-for="(item,key) in filterCounty" 
@@ -162,7 +162,7 @@
 // https://opendata.epa.gov.tw/Data/Contents/AQI/
 Vue.component('cards', {
   template: `
-  <div class="card mb-3"  >
+  <div class="card mb-3" >
     <div class="card-header" :class="cardColor">{{cardsData.County}} - {{cardsData.SiteName}}
       <a class="float-right" href="#" @click.prevent="outadd()">
       <slot name="icon">
@@ -288,19 +288,19 @@ var app = new Vue({
     add(focusItem){
       var vm = this
       vm.stared.push(focusItem);
-      var index = this.filterCounty.findIndex(item=>{
+      var index = vm.filterCounty.findIndex(item=>{
         return focusItem.SiteName == item.SiteName
       })
-      this.filterCounty.splice(index,1)
+      vm.filterCounty.splice(index,1)
       localStorage.setItem('cardsData', JSON.stringify(vm.stared));
     },
     remove(focusItem){
       var vm = this
       vm.filterCounty.push(focusItem);
-      var index = this.stared.findIndex(item=>{
+      var index = vm.stared.findIndex(item=>{
         return focusItem.SiteName == item.SiteName
       })
-      this.stared.splice(index,1)
+      vm.stared.splice(index,1)
       localStorage.setItem('cardsData', JSON.stringify(vm.stared));
     }
   }
