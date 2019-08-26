@@ -10,10 +10,10 @@ export default new Router({
   routes: [
     {
       path: '*',
-      redirect: '/'
+      redirect: '/login'
     },
     {
-      path: '/',
+      path: '/home',
       name: 'home',
       component: Home,
       meta: { requiresAuth: true }
@@ -24,8 +24,7 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: () => import('./views/About.vue')
     },
     {
       path: '/login',

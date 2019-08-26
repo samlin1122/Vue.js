@@ -1,7 +1,8 @@
 <template>
   <div id="app" class="container">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/dashboard/products">Dashboard</router-link> |
+      <router-link to="/home">Home</router-link> |
       <router-link to="/about">About</router-link> |
       <router-link to="/login">Login</router-link>
     </div>
@@ -10,13 +11,7 @@
 </template>
 <script>
 export default {
-  name: 'App',
-  created () {
-    const api = 'https://vue-course-api.hexschool.io/api/samlin/products'
-    this.$http.get(api).then((response) => {
-      console.log(response.data)
-    })
-  }
+  name: 'App'
 }
 </script>
 <style lang="scss">

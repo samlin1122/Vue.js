@@ -34,7 +34,7 @@ export default {
       this.$http.post(api, vm.user).then((response) => {
         console.log(response.data.success)
         if (response.data.success) {
-          vm.$router.push('/')
+          vm.$router.push('/dashboard/products')
         }
       })
     }

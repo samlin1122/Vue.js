@@ -5,7 +5,7 @@
       <div class="row">
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           <sidebar />
-          <router-view></router-view>
+          <router-view/>
         </main>
       </div>
     </div>
