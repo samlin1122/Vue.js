@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :active.sync="isLoading"></loading>
     <div class="text-right mt-4">
       <button class="btn btn-primary" @click="openModal(true)" data-toggle="modal" data-target="#productModal">建立新的產品</button>
     </div>
@@ -51,15 +52,15 @@
               <div class="col-sm-4">
                 <div class="form-group">
                   <label for="image">輸入圖片網址</label>
-                  <input type="text" class="form-control" id="image" @change="uploadFile" v-model="tempProduct.imageUrl" placeholder="請輸入圖片連結">
+                  <input type="text" class="form-control" id="image" v-model="tempProduct.imageUrl" placeholder="請輸入圖片連結">
                 </div>
                 <div class="form-group">
                   <label for="customFile">或 上傳圖片
-                    <i class="fas fa-spinner fa-spin"></i>
+                    <i class="fas fa-spinner fa-spin" v-if="fileUploading"></i>
                   </label>
-                  <input type="file" id="customFile" class="form-control" ref="files">
+                  <input type="file" id="customFile" @change="uploadFile" class="form-control" ref="files">
                 </div>
-                <img img="https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=828346ed697837ce808cae68d3ddc3cf&auto=format&fit=crop&w=1350&q=80" class="img-fluid" alt="">
+                <img :src="tempProduct.imageUrl" class="img-fluid" alt="">
               </div>
               <div class="col-sm-8">
                 <div class="form-group">
@@ -146,7 +147,9 @@ export default {
     return {
       products: [],
       tempProduct: {},
-      isNew: false
+      isNew: false,
+      isLoading: false,
+      fileUploading: false
     }
   },
   created () {
@@ -156,8 +159,10 @@ export default {
     getProducts () {
       const api = 'https://vue-course-api.hexschool.io/api/samlin/products'
       const vm = this
+      vm.isLoading = true
       this.$http.get(api).then((response) => {
         console.log(response.data)
+        vm.isLoading = false
         vm.products = response.data.products
       })
     },
@@ -188,6 +193,7 @@ export default {
           console.log('新增失敗')
         }
         vm.getProducts()
+        console.log(this.tempProduct.imageUrl)
       })
     },
     deleteProducts (item) {
@@ -204,11 +210,12 @@ export default {
       })
     },
     uploadFile () {
-      console.log(this)
       const uploadedFile = this.$refs.files.files[0]
+      const id = this.$refs.files.id
       const vm = this
       const formData = new FormData()
       formData.append('file-to-upload', uploadedFile)
+      vm.fileUploading = true
       const url = 'https://vue-course-api.hexschool.io/api/samlin/admin/upload'
       this.$http.post(url, formData, {
         headers: {
@@ -216,8 +223,10 @@ export default {
         }
       }).then((respone) => {
         if (respone.data.success) {
+          vm.fileUploading = false
           // vm.tempProduct.imageUrl = respone.data.imageUrl
           vm.$set(vm.tempProduct, 'imageUrl', respone.data.imageUrl)
+          document.getElementById(id).value = ''
         }
       })
     }
