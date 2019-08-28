@@ -43,6 +43,18 @@ export default new Router({
           meta: { requiresAuth: true }
         }
       ]
+    },
+    {
+      path: '/',
+      name: 'dashboard',
+      component: () => import('./views/Dashboard.vue'),
+      children: [
+        {
+          path: 'customer_order',
+          name: 'CustomerOrder',
+          component: () => import('./views/CustomerOrder.vue')
+        }
+      ]
     }
   ]
 })

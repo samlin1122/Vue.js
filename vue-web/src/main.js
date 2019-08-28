@@ -8,12 +8,15 @@ import 'bootstrap'
 
 import App from './App.vue'
 import router from './router'
+import './bus'
+import currencyFilter from './currency'
 
 Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 axios.defaults.withCredentials = true
 
 Vue.component('loading', Loading)
+Vue.filter('currency', currencyFilter)
 
 new Vue({
   router,

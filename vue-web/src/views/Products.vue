@@ -20,10 +20,10 @@
           <td>{{ item.category }}</td>
           <td>{{ item.title }}</td>
           <td class="text-right">
-            {{ item.origin_price}}
+            {{ item.origin_price|currency}}
           </td>
           <td class="text-right">
-            {{ item.price}}
+            {{ item.price|currency}}
           </td>
           <td>
             <span v-if="item.is_enabled" class="text-success">啟用</span>
@@ -36,6 +36,23 @@
         </tr>
       </tbody>
     </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" :class="{'disabled':!pagination.has_pre}">
+          <a class="page-link" href="#" @click.prevent="getProducts(pagination.current_page-1)" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" v-for="page in pagination.total_pages" :class="{'active':pagination.current_page===page}" :key="page">
+          <a class="page-link" href="#" @click.prevent="getProducts(page)">{{page}}</a>
+        </li>
+        <li class="page-item" :class="{'disabled':!pagination.has_next}">
+          <a class="page-link" href="#" @click.prevent="getProducts(pagination.current_page+1)" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content border-0">
@@ -149,21 +166,23 @@ export default {
       tempProduct: {},
       isNew: false,
       isLoading: false,
-      fileUploading: false
+      fileUploading: false,
+      pagination: {}
     }
   },
   created () {
     this.getProducts()
   },
   methods: {
-    getProducts () {
-      const api = 'https://vue-course-api.hexschool.io/api/samlin/products'
+    getProducts (page = 1) {
+      const api = `https://vue-course-api.hexschool.io/api/samlin/products?page=${page}`
       const vm = this
       vm.isLoading = true
       this.$http.get(api).then((response) => {
         console.log(response.data)
         vm.isLoading = false
         vm.products = response.data.products
+        vm.pagination = response.data.pagination
       })
     },
     openModal (isNew, item) {
@@ -190,7 +209,7 @@ export default {
           $('#productModal').modal('hide')
         } else {
           $('#productModal').modal('hide')
-          console.log('新增失敗')
+          this.$bus.$emit('message:push', response.data.message, 'danger')
         }
         vm.getProducts()
         console.log(this.tempProduct.imageUrl)
@@ -202,9 +221,9 @@ export default {
       this.$http.delete(api, { data: vm.item }).then((response) => {
         console.log(response.data)
         if (response.data.success) {
-          console.log('刪除成功')
+          this.$bus.$emit('message:push', response.data.message, 'success')
         } else {
-          console.log('刪除失敗')
+          this.$bus.$emit('message:push', response.data.message, 'danger')
         }
         vm.getProducts()
       })
